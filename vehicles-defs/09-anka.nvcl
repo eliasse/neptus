@@ -375,7 +375,7 @@
     </communication-means>
     <consoles>
         <console name="LAUV">
-            <xml-file>../conf/consoles/lauv.ncon</xml-file>
+            <xml-file>../conf/consoles/lauv-sunfish.ncon</xml-file>
         </console>
     </consoles>
 </system>
