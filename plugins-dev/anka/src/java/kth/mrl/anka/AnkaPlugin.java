@@ -31,9 +31,8 @@ public class AnkaPlugin extends SimpleRendererInteraction{
 	}
 	
 	String systemName = "anka";
-	String sourceEntity = "mapper";
 	int systemAddress = 0x0809;
-	Map lastMap;
+	Map lastMap = null;
 	
 	@NeptusProperty(name="Blob radius (pixels)")
 	public int blobRadius = 10;
@@ -60,48 +59,41 @@ public class AnkaPlugin extends SimpleRendererInteraction{
 	public void paint(Graphics2D g, StateRenderer2D renderer) {
         super.paint(g, renderer);
         
-		for (MapFeature feature: lastMap.getFeatures()) {
-			switch (feature.getFeatureType()) {
-			case POI:
-				for (MapPoint mappoint : feature.getFeature()) {
-					//MapPoint mappoint = feature.getFeature().firstElement();
-		            LocationType loc = new LocationType(Math.toDegrees(mappoint.getLat()),
-		                    Math.toDegrees(mappoint.getLon()));
-		            Point2D pt = renderer.getScreenPosition(loc);
-		            Ellipse2D ellis = new Ellipse2D.Double(pt.getX() - blobRadius, pt.getY() - blobRadius,
-		                    blobRadius * 2, blobRadius * 2);
-		            
-		            float[] hsb = Color.RGBtoHSB(feature.getRgbRed(), 
-		            		feature.getRgbGreen(), 
-		            		feature.getRgbBlue(), null);
-		            
-		            Color color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
-		            
-		            g.setColor(color);
-		            //g.draw(pt);
-		            g.fill(ellis);
-				}
-				break;
-			case LINE:
-				System.out.println("Received LINE");
-				break;
-			case CONTOUREDPOLY:
-				break;
-			case FILLEDPOLY:
-				break;
-			}
-		}
+        if (lastMap != null) {
+    		for (MapFeature feature: lastMap.getFeatures()) {
+    			switch (feature.getFeatureType()) {
+    			case POI:
+    				for (MapPoint mappoint : feature.getFeature()) {
+    					//MapPoint mappoint = feature.getFeature().firstElement();
+    		            LocationType loc = new LocationType(Math.toDegrees(mappoint.getLat()),
+    		                    Math.toDegrees(mappoint.getLon()));
+    		            Point2D pt = renderer.getScreenPosition(loc);
+    		            Ellipse2D ellis = new Ellipse2D.Double(pt.getX() - blobRadius, pt.getY() - blobRadius,
+    		                    blobRadius * 2, blobRadius * 2);
+    		            
+    		            float[] hsb = Color.RGBtoHSB(feature.getRgbRed(), 
+    		            		feature.getRgbGreen(), 
+    		            		feature.getRgbBlue(), null);
+    		            
+    		            Color color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+    		            
+    		            g.setColor(color);
+    		            //g.draw(pt);
+    		            g.fill(ellis);
+    				}
+    				break;
+    			case LINE:
+    				System.out.println("Received LINE");
+    				break;
+    			case CONTOUREDPOLY:
+    				break;
+    			case FILLEDPOLY:
+    				break;
+    			}
+    		}
+        }
 	}
 	
-	//Collection<MapFeature> mapFeatures = new Collection<MapFeature>()
-	//ArrayList<MapFeature> mapfeatures = new ArrayList<MapFeature>();
-	//Collection<MapPoint> linePoints = new Collection<MapPoint>()
-
-	//MapPoint poi = new MapPoint(60.0, 20.0, (float)4.0);
-	//MapFeature foi = new MapFeature("A",FEATURE_TYPE.POI, (short)0, (short)255, (short)0, poi);
-	//Collection<MapFeature> mapfeatures = new Collection<>(foi);
-	//Map map = new Map("FeatureOfInterest", mapfeatures);
-	//MsgList msglist = new MsgList();
 	
     @Override
     public void cleanSubPanel(){
